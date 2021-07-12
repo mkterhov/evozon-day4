@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Helpers\Helpers;
-use App\Model\ChildrenOfIluvatar;
 use App\Model\EntityClasses;
 use App\Model\Type;
 use Exception;

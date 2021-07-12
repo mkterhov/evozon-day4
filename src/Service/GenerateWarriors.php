@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Model\ChildrenOfIluvatar;
 use App\Model\EntityClasses;
 use Exception;
 

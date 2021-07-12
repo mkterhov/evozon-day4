@@ -65,24 +65,6 @@ abstract class ChildrenOfIluvatar
 
     public function __toString()
     {
-        return sprintf(' %s : BY NAME %s',get_class($this),$this->getName());
+        return sprintf('ClassName: %s | NAME: %s | FIGHT_POWER: %d', get_class($this), $this->getName(), $this->getFightPower());
     }
-//
-//    public function __serialize(): array
-//    {
-//        return [
-//            'name' => $this->name,
-//            'strength' => $this->strength,
-//            'intelligence' => $this->intelligence,
-//            'charisma' => $this->charisma,
-//        ];
-//    }
-//
-//    public function __unserialize(array $data): void
-//    {
-//        $this->name = $data['name'];
-//        $this->strength = $data['strength'];
-//        $this->intelligence = $data['intelligence'];
-//        $this->charisma = $data['charisma'];
-//    }
 }

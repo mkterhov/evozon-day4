@@ -3,15 +3,14 @@
 require __DIR__.'/vendor/autoload.php';
 
 use App\Service\GenerateWarriors;
+use App\Service\SerializeEntitiesService;
 
-$warriorGenerator = new GenerateWarriors();
+$serializer = new SerializeEntitiesService('moria.txt');
 
-$warriorGenerator->createWarriors(10);
+$serializer->serializeDataToFile(10);
 
-foreach ($warriorGenerator->getWarriors() as $warrior) {
-    $serializedWarrior = serialize($warrior);
-    echo $serializedWarrior . PHP_EOL;
-    $deserializedWarrior = unserialize($serializedWarrior);
-    echo $deserializedWarrior->getFightPower() . PHP_EOL;
+$entities =  $serializer->unserializeDataFromFile();
 
+foreach ($entities as $entity) {
+    echo $entity . PHP_EOL;
 }
