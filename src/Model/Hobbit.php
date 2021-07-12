@@ -10,11 +10,6 @@ class Hobbit extends Warrior
     const INTELLIGENCE_MODIFIER = 20;
     const CHARISMA_MODIFIER = 10;
 
-    public function calculateFightPower(): void
-    {
-        // TODO: Implement calculateFightPower() method.
-    }
-
     public function __serialize(): array
     {
         // TODO: Implement __serialize() method.

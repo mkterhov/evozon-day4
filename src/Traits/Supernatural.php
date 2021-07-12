@@ -17,5 +17,4 @@ trait Supernatural
     {
         $this->supernaturalPowers = $supernaturalPowers;
     }
-
 }

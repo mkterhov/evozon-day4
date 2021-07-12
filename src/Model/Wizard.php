@@ -15,11 +15,15 @@ class Wizard extends Warrior
     const CHARISMA_MODIFIER = 5;
     const SUPERNATURAL_MODIFIER = 20;
 
-    public function calculateFightPower(): void
+    public function __construct(string $name, float $strength, float $intelligence, float $charisma, float $supernaturalPowers)
     {
-        // TODO: Implement calculateFightPower() method.
+        $this->supernaturalPowers = $supernaturalPowers;
+        parent::__construct($name, $strength, $intelligence, $charisma);
     }
-
+    public function calculateFightPower(): float
+    {
+        return parent::calculateFightPower() + static::SUPERNATURAL_MODIFIER * $this->supernaturalPowers;
+    }
     public function __serialize(): array
     {
         // TODO: Implement __serialize() method.

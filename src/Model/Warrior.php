@@ -8,11 +8,24 @@ use App\Interfaces\ChildrenOfIluvatar;
 
 abstract class Warrior implements ChildrenOfIluvatar
 {
+    const STRENGTH_MODIFIER = 'abstract';
+    const INTELLIGENCE_MODIFIER = 'abstract';
+    const CHARISMA_MODIFIER = 'abstract';
+
     protected string $name;
     protected float $strength;
     protected float $intelligence;
     protected float $charisma;
     protected float $fightPower;
+
+    public function calculateFightPower(): float
+    {
+        return array_sum([
+            static::STRENGTH_MODIFIER * $this->strength,
+            static::INTELLIGENCE_MODIFIER * $this->intelligence,
+            static::CHARISMA_MODIFIER * $this->charisma,
+        ]);
+    }
 
     public function __construct(string $name, float $strength, float $intelligence, float $charisma)
     {
@@ -20,6 +33,8 @@ abstract class Warrior implements ChildrenOfIluvatar
         $this->strength = $strength;
         $this->intelligence = $intelligence;
         $this->charisma = $charisma;
+
+        $this->fightPower = $this->calculateFightPower();
     }
 
     public function getStrength(): float
@@ -66,8 +81,6 @@ abstract class Warrior implements ChildrenOfIluvatar
     {
         $this->name = $name;
     }
-
-    abstract public function calculateFightPower(): void;
 
     abstract public function __serialize(): array;
 

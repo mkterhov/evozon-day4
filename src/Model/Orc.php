@@ -15,9 +15,15 @@ class Orc extends Warrior
     const CHARISMA_MODIFIER = 1;
     const SUPERNATURAL_MODIFIER = 5;
 
-    public function calculateFightPower(): void
+    public function __construct(string $name, float $strength, float $intelligence, float $charisma, float $supernaturalPowers)
     {
-        // TODO: Implement calculateFightPower() method.
+        $this->supernaturalPowers = $supernaturalPowers;
+        parent::__construct($name, $strength, $intelligence, $charisma);
+    }
+
+    public function calculateFightPower(): float
+    {
+        return parent::calculateFightPower() + static::SUPERNATURAL_MODIFIER * $this->supernaturalPowers;
     }
 
     public function __serialize(): array
