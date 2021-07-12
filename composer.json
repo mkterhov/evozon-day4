@@ -12,8 +12,5 @@
       "App\\": "src/"
     }
   },
-  "files": [
-    "src/Helpers/Helpers.php"
-  ],
   "require": {}
 }
