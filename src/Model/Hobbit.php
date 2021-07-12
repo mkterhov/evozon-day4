@@ -4,19 +4,15 @@
 namespace App\Model;
 
 
-class Hobbit extends Warrior
+class Hobbit extends ChildrenOfIluvatar
 {
-    const STRENGTH_MODIFIER = 10;
-    const INTELLIGENCE_MODIFIER = 20;
-    const CHARISMA_MODIFIER = 10;
-
-    public function __serialize(): array
+    public function getFightPower(): float
     {
-        // TODO: Implement __serialize() method.
+        return 10 * $this->strength + 20 * $this->intelligence + 20 * $this->charisma;
     }
 
-    public function __unserialize(array $data): void
+    public function isEvil(): bool
     {
-        // TODO: Implement __unserialize() method.
+        return false;
     }
 }

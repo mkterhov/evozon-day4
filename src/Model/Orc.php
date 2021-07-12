@@ -4,16 +4,9 @@
 namespace App\Model;
 
 
-use App\Traits\Supernatural;
-
-class Orc extends Warrior
+class Orc extends ChildrenOfIluvatar
 {
-    use Supernatural;
-
-    const STRENGTH_MODIFIER = 30;
-    const INTELLIGENCE_MODIFIER = 10;
-    const CHARISMA_MODIFIER = 1;
-    const SUPERNATURAL_MODIFIER = 5;
+    private float $supernaturalPowers;
 
     public function __construct(string $name, float $strength, float $intelligence, float $charisma, float $supernaturalPowers)
     {
@@ -21,18 +14,13 @@ class Orc extends Warrior
         parent::__construct($name, $strength, $intelligence, $charisma);
     }
 
-    public function calculateFightPower(): float
+    public function getFightPower(): float
     {
-        return parent::calculateFightPower() + static::SUPERNATURAL_MODIFIER * $this->supernaturalPowers;
+        return 30 * $this->strength + 10 * $this->intelligence + 1 * $this->charisma + 5 * $this->supernaturalPowers;
     }
 
-    public function __serialize(): array
+    public function isEvil(): bool
     {
-        // TODO: Implement __serialize() method.
-    }
-
-    public function __unserialize(array $data): void
-    {
-        // TODO: Implement __unserialize() method.
+        return true;
     }
 }

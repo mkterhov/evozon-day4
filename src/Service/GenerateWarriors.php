@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-
-use App\Model\Balrog;
+use App\Model\ChildrenOfIluvatar;
 use Exception;
 
 class GenerateWarriors
@@ -18,6 +17,9 @@ class GenerateWarriors
         $this->warriorFactory = new WarriorFactory();
     }
 
+    /**
+     * @return ChildrenOfIluvatar[]|array
+     */
     public function getWarriors(): array
     {
         return $this->warriors;
