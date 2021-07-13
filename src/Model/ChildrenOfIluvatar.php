@@ -65,6 +65,13 @@ abstract class ChildrenOfIluvatar
 
     public function __toString()
     {
-        return sprintf('ClassName: %s | NAME: %s | FIGHT_POWER: %d', get_class($this), $this->getName(), $this->getFightPower());
+        return sprintf(
+            'ClassName: %s | STRENGTH: %s | ARMY: %s | NAME: %s | FIGHT_POWER: %d',
+            get_class($this),
+            $this->getStrength(),
+            $this->isEvil() ? "EVIL" : "GOOD",
+            $this->getName(),
+            $this->getFightPower()
+        );
     }
 }
