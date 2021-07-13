@@ -7,9 +7,13 @@ use App\Service\SerializeEntitiesService;
 use App\Service\WarriorStorage;
 
 $serializer = new SerializeEntitiesService('moria.txt');
-$serializer->serializeRandomDataToFile(100);
+$serializer->serializeRandomDataToFile();
 
 $storage = new WarriorStorage($serializer);
-$battleManager = new BattleManagerService($storage);
+try {
+    $battleManager = new BattleManagerService($storage);
+    $battleManager->battle();
+} catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+}
 
-$battleManager->battle();

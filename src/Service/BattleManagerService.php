@@ -10,6 +10,11 @@ use App\Model\Type;
 
 class BattleManagerService
 {
+    const FIGHT_IS_BETWEEN_MESSAGE = "FIGHT IS BETWEEN: %s (good) and %s (evil) ";
+    const FIGHT_WINNER_MESSAGE = "THE WINNER IS ";
+    const BATTLE_WINNER_MESSAGE = "THE FORCES OF %s WON!";
+    const BATTLE_SCORE = "GOOD %d:%d EVIL";
+
     /**
      * @var ChildrenOfIluvatar[]|array
      */
@@ -20,8 +25,16 @@ class BattleManagerService
      */
     public array $armyOfTheEvil = [];
 
+    /**
+     * @var ChildrenOfIluvatar[]|array
+     */
+    public array $survivingForces = [];
+
     private WarriorStorage $storage;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct(WarriorStorage $storage)
     {
         $this->storage = $storage;
@@ -34,42 +47,51 @@ class BattleManagerService
         $this->armyOfTheGood = array_values(array_filter($warriors, function ($warrior) {
             return !$warrior->isEvil();
         }));
+        if (empty($this->armyOfTheGood) || empty($this->armyOfTheEvil)) {
+            throw new \Exception('One of the armies is empty!');
+        }
     }
 
     public function battle()
     {
         while (min(count($this->armyOfTheGood), count($this->armyOfTheEvil)) !== 0) {
-            $largestArmySize = min(count($this->armyOfTheGood), count($this->armyOfTheEvil));
-            for ($i = 0; $i < $largestArmySize; $i++) {
-                if (empty($this->armyOfTheGood) || empty($this->armyOfTheEvil)) {
-                    break;
-                }
-                $evilIndex = mt_rand(0, count($this->armyOfTheEvil) - 1);
-                $goodIndex = mt_rand(0, count($this->armyOfTheGood) - 1);
-                $goodFighter = $this->armyOfTheGood[$goodIndex];
-                $evilFighter = $this->armyOfTheEvil[$evilIndex];
-                echo count($this->armyOfTheGood) . " " . count($this->armyOfTheEvil) . PHP_EOL;
-                $winner = $goodFighter->fight($evilFighter);
-                echo sprintf(
-                    'FIGHT IS BETWEEN: %s (good) and %s (evil)' . PHP_EOL,
-                    $goodFighter->getName(),
-                    $evilFighter->getName()
-                );
-                if ($winner->isEvil()) {
-                    unset($this->armyOfTheGood[$goodIndex]);
-                    $this->armyOfTheGood = array_values($this->armyOfTheGood);
-                    echo "THE WINNER IS " . $evilFighter . PHP_EOL;
-                }
-                if (!$winner->isEvil()) {
-                    unset($this->armyOfTheEvil[$evilIndex]);
-                    $this->armyOfTheEvil = array_values($this->armyOfTheEvil);
-                    echo "THE WINNER IS " . $goodFighter . PHP_EOL;
-                }
+            $evilIndex = mt_rand(0, count($this->armyOfTheEvil) - 1);
+            $goodIndex = mt_rand(0, count($this->armyOfTheGood) - 1);
+            $goodFighter = $this->armyOfTheGood[$goodIndex];
+            $evilFighter = $this->armyOfTheEvil[$evilIndex];
+
+            echo sprintf(self::BATTLE_SCORE, count($this->armyOfTheGood), count($this->armyOfTheEvil)) . PHP_EOL;
+
+            $winner = $goodFighter->fight($evilFighter);
+
+            echo sprintf(
+                self::FIGHT_IS_BETWEEN_MESSAGE . PHP_EOL,
+                $goodFighter->getName(),
+                $evilFighter->getName()
+            );
+
+            if ($winner->isEvil()) {
+                $this->removeFighterFromArmy($this->armyOfTheGood, $goodIndex);
             }
+            if (!$winner->isEvil()) {
+                $this->removeFighterFromArmy($this->armyOfTheEvil, $evilIndex);
+            }
+            echo self::FIGHT_WINNER_MESSAGE . $winner . PHP_EOL;
         }
         $winningSide = !empty($this->armyOfTheEvil) ? Type::EVIL : Type::GOOD;
         $this->storage->saveWarriors(array_merge($this->armyOfTheEvil, $this->armyOfTheGood));
-        $finalMessage = sprintf("THE FORCES OF %s WON!", $winningSide);
+
+        $finalMessage = sprintf(self::BATTLE_WINNER_MESSAGE, $winningSide);
         echo $finalMessage . PHP_EOL;
+    }
+
+    /**
+     * @param $army
+     * @param $index
+     */
+    private function removeFighterFromArmy(&$army, $index): void
+    {
+        unset($army[$index]);
+        $army = array_values($army);
     }
 }
