@@ -7,12 +7,9 @@ use App\Service\SerializeEntitiesService;
 use App\Service\WarriorStorage;
 
 $serializer = new SerializeEntitiesService('moria.txt');
-$serializer->serializeRandomDataToFile();
+$serializer->serializeRandomDataToFile(100);
+
 $storage = new WarriorStorage($serializer);
 $battleManager = new BattleManagerService($storage);
-foreach ($battleManager->armyOfTheEvil as $entity) {
-    echo $entity . PHP_EOL;
-}
-foreach ($battleManager->armyOfTheGood as $entity) {
-    echo $entity . PHP_EOL;
-}
+
+$battleManager->battle();

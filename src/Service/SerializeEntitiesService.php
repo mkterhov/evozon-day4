@@ -21,12 +21,14 @@ class SerializeEntitiesService
     {
         $this->generateWarriors->createWarriors($nr);
         $warriors = $this->generateWarriors->getWarriors();
-        file_put_contents($this->fileName, base64_encode(serialize($warriors)));
+//        file_put_contents($this->fileName, base64_encode(serialize($warriors)));
+        file_put_contents($this->fileName, serialize($warriors));
     }
 
     public function serializeArrayToFile(array $entities): void
     {
-        file_put_contents($this->fileName, base64_encode(serialize($entities)));
+//        file_put_contents($this->fileName, base64_encode(serialize($entities)));
+        file_put_contents($this->fileName, serialize($entities));
     }
 
     /**
@@ -34,6 +36,7 @@ class SerializeEntitiesService
      */
     public function unserializeDataFromFile(): array
     {
-        return unserialize(base64_decode(file_get_contents($this->fileName)));
+//        return unserialize(base64_decode(file_get_contents($this->fileName)));
+        return unserialize(file_get_contents($this->fileName));
     }
 }

@@ -4,6 +4,8 @@
 namespace App\Model;
 
 
+use App\Helpers\Helpers;
+
 abstract class ChildrenOfIluvatar
 {
     protected string $name;
@@ -26,6 +28,17 @@ abstract class ChildrenOfIluvatar
     public function getStrength(): float
     {
         return $this->strength;
+    }
+
+    public function fight(ChildrenOfIluvatar $opponent): ChildrenOfIluvatar
+    {
+        if ($this->getFightPower() < $opponent->getFightPower()) {
+            return Helpers::randomFloat() < 0.01 ? $this : $opponent;
+        }
+        if ($this->getFightPower() > $opponent->getFightPower()) {
+            return Helpers::randomFloat() < 0.01 ? $opponent : $this;
+        }
+        return Helpers::randomFloat() < 0.50 ? $opponent : $this;
     }
 
     public function setStrength(float $strength): void
