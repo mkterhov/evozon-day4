@@ -1,36 +1,45 @@
 <?php
 
-
 namespace App\Model;
 
 
-use App\Traits\Supernatural;
-
-class Wizard extends Warrior
+class Wizard extends ChildrenOfIluvatar
 {
-    use Supernatural;
-
-    const STRENGTH_MODIFIER = 20;
-    const INTELLIGENCE_MODIFIER = 30;
-    const CHARISMA_MODIFIER = 5;
-    const SUPERNATURAL_MODIFIER = 20;
+    private float $supernaturalPowers;
 
     public function __construct(string $name, float $strength, float $intelligence, float $charisma, float $supernaturalPowers)
     {
         $this->supernaturalPowers = $supernaturalPowers;
         parent::__construct($name, $strength, $intelligence, $charisma);
     }
-    public function calculateFightPower(): float
+
+    public function getFightPower(): float
     {
-        return parent::calculateFightPower() + static::SUPERNATURAL_MODIFIER * $this->supernaturalPowers;
+        return 20 * $this->strength + 30 * $this->intelligence + 5 * $this->charisma + 20 * $this->supernaturalPowers;
     }
+
+    public function isEvil(): bool
+    {
+        return false;
+    }
+
     public function __serialize(): array
     {
-        // TODO: Implement __serialize() method.
+        return [
+            'name' => $this->name,
+            'strength' => $this->strength,
+            'intelligence' => $this->intelligence,
+            'charisma' => $this->charisma,
+            'supernaturalPowers' => $this->supernaturalPowers,
+        ];
     }
 
     public function __unserialize(array $data): void
     {
-        // TODO: Implement __unserialize() method.
+        $this->name = $data['name'];
+        $this->strength = $data['strength'];
+        $this->intelligence = $data['intelligence'];
+        $this->charisma = $data['charisma'];
+        $this->supernaturalPowers = $data['supernaturalPowers'];
     }
 }

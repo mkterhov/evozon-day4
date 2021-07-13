@@ -1,11 +1,19 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-use App\Service\GenerateWarriors;
+use App\Service\BattleManagerService;
+use App\Service\SerializeEntitiesService;
+use App\Service\WarriorStorage;
 
-$warriorGenerator = new GenerateWarriors();
+$serializer = new SerializeEntitiesService('moria.txt');
+$serializer->serializeRandomDataToFile();
 
-$warriorGenerator->createWarriors(10);
+$storage = new WarriorStorage($serializer);
+try {
+    $battleManager = new BattleManagerService($storage);
+    $battleManager->battle();
+} catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+}
 
-var_dump($warriorGenerator->getWarriors());

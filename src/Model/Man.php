@@ -4,19 +4,15 @@
 namespace App\Model;
 
 
-class Man extends Warrior
+class Man extends ChildrenOfIluvatar
 {
-    const STRENGTH_MODIFIER = 30;
-    const INTELLIGENCE_MODIFIER = 30;
-    const CHARISMA_MODIFIER = 10;
-
-    public function __serialize(): array
+    public function getFightPower(): float
     {
-        // TODO: Implement __serialize() method.
+        return 30 * $this->strength + 30 * $this->intelligence + 10 * $this->charisma;
     }
 
-    public function __unserialize(array $data): void
+    public function isEvil(): bool
     {
-        // TODO: Implement __unserialize() method.
+        return false;
     }
 }

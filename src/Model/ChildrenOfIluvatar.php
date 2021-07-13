@@ -4,28 +4,18 @@
 namespace App\Model;
 
 
-use App\Interfaces\ChildrenOfIluvatar;
+use App\Helpers\Helpers;
 
-abstract class Warrior implements ChildrenOfIluvatar
+abstract class ChildrenOfIluvatar
 {
-    const STRENGTH_MODIFIER = 'abstract';
-    const INTELLIGENCE_MODIFIER = 'abstract';
-    const CHARISMA_MODIFIER = 'abstract';
-
     protected string $name;
     protected float $strength;
     protected float $intelligence;
     protected float $charisma;
-    protected float $fightPower;
 
-    public function calculateFightPower(): float
-    {
-        return array_sum([
-            static::STRENGTH_MODIFIER * $this->strength,
-            static::INTELLIGENCE_MODIFIER * $this->intelligence,
-            static::CHARISMA_MODIFIER * $this->charisma,
-        ]);
-    }
+    abstract public function getFightPower(): float;
+
+    abstract public function isEvil(): bool;
 
     public function __construct(string $name, float $strength, float $intelligence, float $charisma)
     {
@@ -33,13 +23,22 @@ abstract class Warrior implements ChildrenOfIluvatar
         $this->strength = $strength;
         $this->intelligence = $intelligence;
         $this->charisma = $charisma;
-
-        $this->fightPower = $this->calculateFightPower();
     }
 
     public function getStrength(): float
     {
         return $this->strength;
+    }
+
+    public function fight(ChildrenOfIluvatar $opponent): ChildrenOfIluvatar
+    {
+        if ($this->getFightPower() < $opponent->getFightPower()) {
+            return Helpers::randomFloat() < 0.01 ? $this : $opponent;
+        }
+        if ($this->getFightPower() > $opponent->getFightPower()) {
+            return Helpers::randomFloat() < 0.01 ? $opponent : $this;
+        }
+        return Helpers::randomFloat() < 0.50 ? $opponent : $this;
     }
 
     public function setStrength(float $strength): void
@@ -67,11 +66,6 @@ abstract class Warrior implements ChildrenOfIluvatar
         $this->charisma = $charisma;
     }
 
-    public function getFightPower(): float
-    {
-        return $this->fightPower;
-    }
-
     public function getName(): string
     {
         return $this->name;
@@ -82,7 +76,15 @@ abstract class Warrior implements ChildrenOfIluvatar
         $this->name = $name;
     }
 
-    abstract public function __serialize(): array;
-
-    abstract public function __unserialize(array $data): void;
+    public function __toString()
+    {
+        return sprintf(
+            'ClassName: %s | STRENGTH: %s | ARMY: %s | NAME: %s | FIGHT_POWER: %d',
+            get_class($this),
+            $this->getStrength(),
+            $this->isEvil() ? "EVIL" : "GOOD",
+            $this->getName(),
+            $this->getFightPower()
+        );
+    }
 }
